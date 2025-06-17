@@ -1,8 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;  
 
 
-public class GUI extends JFrame {
+public class GUI extends JFrame implements ActionListener {
     private JMenuBar menuBar;
     private JMenu menuFile;
     private JMenu menuEdit;
@@ -32,9 +33,13 @@ public class GUI extends JFrame {
         menuFile = new JMenu("File");
         menuEdit = new JMenu("Edit");
         newGraph = new JMenuItem("New Graph");
+        newGraph.addActionListener(this);
         openGraph = new JMenuItem("Open Graph");
+        openGraph.addActionListener(this);
         saveGraph = new JMenuItem("Save Graph");
+        saveGraph.addActionListener(this);
         newNode = new JMenuItem("New Node");
+        newNode.addActionListener(this);
         
         menuFile.add(newGraph);
         menuFile.add(openGraph);
@@ -50,5 +55,24 @@ public class GUI extends JFrame {
 
         this.setJMenuBar(menuBar);
         
+    }
+    public void actionPerformed(ActionEvent e) {
+        String cmd = e.getActionCommand();
+        switch (cmd) {
+            case "New Graph":
+                System.out.println("Create new graph");
+                break;
+            case "Open Graph":
+                System.out.println("Opening new graph");
+                break;
+            case "Save Graph":
+                break;
+            case "New Node":
+                g.createNodeGraphic();
+                break;
+            default:
+                break;
+        }
+
     }
 }
