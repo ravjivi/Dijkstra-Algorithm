@@ -11,10 +11,10 @@ public class GUI extends JFrame implements ActionListener {
     private JMenuItem openGraph;
     private JMenuItem saveGraph;
     private JMenuItem newNode;
-    private Graphic g;
+    private Graph g;
 
     public GUI() {
-        
+        createWindow();
     }
 
     public void createWindow() {
@@ -23,6 +23,7 @@ public class GUI extends JFrame implements ActionListener {
         this.getContentPane().setPreferredSize(new Dimension((int)screenSize.getWidth(), (int)screenSize.getHeight()));
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         
+        addElements();
         this.pack();
         this.toFront();
         this.setVisible(true);
@@ -50,7 +51,7 @@ public class GUI extends JFrame implements ActionListener {
        
         menuBar.setBackground(Color.ORANGE);
 
-        g = new Graphic();
+        g = new Graph();
         this.add(g, BorderLayout.CENTER);
 
         this.setJMenuBar(menuBar);
@@ -68,7 +69,7 @@ public class GUI extends JFrame implements ActionListener {
             case "Save Graph":
                 break;
             case "New Node":
-                g.createNodeGraphic();
+                g.createNodeGraph();
                 break;
             default:
                 break;
