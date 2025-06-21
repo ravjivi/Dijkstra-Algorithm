@@ -4,7 +4,7 @@ public class Node {
     private int xPos;
     private int yPos;
 
-    ArrayList<Weight> weightsList = new ArrayList<Weight>();
+    ArrayList<Weight> weightsList;
     public Node() {
         this.xPos = 50;
         this.yPos = 50;
@@ -14,6 +14,7 @@ public class Node {
         this.name = name;
         this.xPos = xPos;
         this.yPos = yPos;
+        weightsList = new ArrayList<Weight>();
     }
     public void createLink(String to, int weight) {
         weightsList.add(new Weight(this.name, to, weight));

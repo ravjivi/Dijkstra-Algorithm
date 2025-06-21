@@ -1,9 +1,12 @@
 import javax.swing.*;
+import javax.swing.plaf.metal.MetalButtonUI;
 import java.awt.*;
 import java.awt.event.*;  
 
 
 public class GUI extends JFrame implements ActionListener {
+    /* Class Variables */
+    private final Dimension SCREENSIZE = Toolkit.getDefaultToolkit().getScreenSize(); // Get device screen size
     private JMenuBar menuBar;
     private JMenu menuFile;
     private JMenu menuEdit;
@@ -13,26 +16,33 @@ public class GUI extends JFrame implements ActionListener {
     private JMenuItem newNode;
     private Graph g;
 
+    private final Color menuBarColor = new Color(50,50,50);
+    private final Color menuItemColor = Color.WHITE;
+
     public GUI() {
         createWindow();
     }
 
-    public void createWindow() {
-        final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    private void createWindow() {
         this.setTitle("Dijkstra's Algorithm");
-        this.getContentPane().setPreferredSize(new Dimension((int)screenSize.getWidth(), (int)screenSize.getHeight()));
+        this.getContentPane().setPreferredSize(new Dimension((int)SCREENSIZE.getWidth()*3/4, (int)SCREENSIZE.getHeight()*3/4)); // Make window size 3/4 the screen size
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         
         addElements();
         this.pack();
+        this.setLocationRelativeTo(null);  // Centres the screen
         this.toFront();
         this.setVisible(true);
     }
 
-    public void addElements() {
+    private void addElements() {
         menuBar = new JMenuBar();
+        menuBar.setBorder(BorderFactory.createEmptyBorder());
+	    menuBar.setBackground(menuBarColor);
         menuFile = new JMenu("File");
+	    menuFile.setForeground(menuItemColor);
         menuEdit = new JMenu("Edit");
+	    menuEdit.setForeground(menuItemColor);
         newGraph = new JMenuItem("New Graph");
         newGraph.addActionListener(this);
         openGraph = new JMenuItem("Open Graph");
@@ -41,22 +51,18 @@ public class GUI extends JFrame implements ActionListener {
         saveGraph.addActionListener(this);
         newNode = new JMenuItem("New Node");
         newNode.addActionListener(this);
-        
         menuFile.add(newGraph);
         menuFile.add(openGraph);
         menuFile.add(saveGraph);
         menuEdit.add(newNode);
         menuBar.add(menuFile);
         menuBar.add(menuEdit);
-       
-        menuBar.setBackground(Color.ORANGE);
-
+        
         g = new Graph();
         this.add(g, BorderLayout.CENTER);
-
         this.setJMenuBar(menuBar);
-        
     }
+
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
         switch (cmd) {
