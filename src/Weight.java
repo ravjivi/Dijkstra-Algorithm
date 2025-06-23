@@ -7,7 +7,6 @@ public class Weight {
         this.fromNode = from;
         this.toNode = to;
         this.weight = weight;
-
     }
 
 }

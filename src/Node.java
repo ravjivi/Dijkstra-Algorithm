@@ -1,19 +1,19 @@
 import java.util.ArrayList;
+import java.awt.*;
+
 public class Node {
     private String name;
     private int xPos;
     private int yPos;
+    private Color colour;
 
     ArrayList<Weight> weightsList;
-    public Node() {
-        this.xPos = 50;
-        this.yPos = 50;
-    }
 
     public Node (String name, int xPos, int yPos) {
         this.name = name;
         this.xPos = xPos;
         this.yPos = yPos;
+        this.colour = Color.WHITE;
         weightsList = new ArrayList<Weight>();
     }
     public void createLink(String to, int weight) {
@@ -28,5 +28,12 @@ public class Node {
     }
     public int getY() {
         return this.yPos;
+    }
+    public Color getColor() {
+        return this.colour;
+    }
+
+    public void setColor(Color c) {
+        this.colour = c;
     }
 }
