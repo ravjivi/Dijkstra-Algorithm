@@ -18,13 +18,14 @@ public class GUI extends JFrame implements ActionListener {
     private final Color menuBarColor = new Color(50,50,50);
     private final Color menuItemColor = Color.WHITE;
 
-    public GUI(String os) {
+    public GUI(String os, int horizontalMargin, int verticalMargin) {
         createWindow();
         if (os.equals("windows")) {
             newNode.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
         } else if (os.equals("mac")) {
             newNode.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.META_DOWN_MASK));
         }
+        g.setMargin(horizontalMargin, verticalMargin);
     }
 
     private void createWindow() {
