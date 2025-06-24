@@ -1,12 +1,13 @@
 public class Weight {
-    private String fromNode;
-    private String toNode;
+    private int toNode;
     private int weight;
 
-    public Weight(String from, String to, int weight) {
-        this.fromNode = from;
+    public Weight(int to, int weight) {
         this.toNode = to;
         this.weight = weight;
+    }
+    public int getToNode() {
+        return this.toNode;
     }
 
 }

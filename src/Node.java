@@ -16,10 +16,20 @@ public class Node {
         this.colour = Color.WHITE;
         weightsList = new ArrayList<Weight>();
     }
-    public void createLink(String to, int weight) {
-        weightsList.add(new Weight(this.name, to, weight));
+    public void createLink(int to, int weight) {
+        weightsList.add(new Weight(to, weight));
     }
 
+    public void setX(int x) {
+        this.xPos = x;
+    }
+    public void setY(int y) {
+        this.yPos = y;
+    }
+    public void setColor(Color c) {
+        this.colour = c;
+    }
+    
     public String getName() {
         return this.name;
     }
@@ -32,8 +42,11 @@ public class Node {
     public Color getColor() {
         return this.colour;
     }
-
-    public void setColor(Color c) {
-        this.colour = c;
+    public int getWeightSize() {
+        return weightsList.size();
     }
+    public int getWeightTo(int n) {
+        return weightsList.get(n).getToNode();
+    }
+    
 }

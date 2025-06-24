@@ -18,14 +18,13 @@ public class GUI extends JFrame implements ActionListener {
     private final Color menuBarColor = new Color(50,50,50);
     private final Color menuItemColor = Color.WHITE;
 
-    public GUI(String os, int horizontalMargin, int verticalMargin) {
+    public GUI(String os) {
         createWindow();
         if (os.equals("windows")) {
             newNode.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
         } else if (os.equals("mac")) {
             newNode.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.META_DOWN_MASK));
         }
-        g.setMargin(horizontalMargin, verticalMargin);
     }
 
     private void createWindow() {
@@ -34,7 +33,7 @@ public class GUI extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         
         addElements();
-        mouseMovement();
+
         this.pack();
         this.setLocationRelativeTo(null);  // Centres the screen
         this.toFront();
@@ -67,14 +66,6 @@ public class GUI extends JFrame implements ActionListener {
         g = new Graph();
         this.add(g, BorderLayout.CENTER);
         this.setJMenuBar(menuBar);
-    }
-
-    public void mouseMovement() {
-        addMouseMotionListener(new MouseMotionAdapter() {
-            public void mouseMoved(MouseEvent e) {
-                g.checkNodeHover(e.getX(), e.getY());
-            }
-        });
     }
 
     public void actionPerformed(ActionEvent e) {
