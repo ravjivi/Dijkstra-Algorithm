@@ -17,8 +17,9 @@ public class Graph extends JPanel {
     private int draggedNodeIndex = -1;
     private int rClickedNodeIndex = -1;
     private boolean makingWeight = false;
-    private JPopupMenu weightMenu = new JPopupMenu();
-    private JTextArea weightTextArea = new JTextArea(Integer.toString(10),1, 2);
+    private JTextField weightTextField = new JTextField(Integer.toString(10), 2);
+    private boolean hoveringLine = false;
+    private int selectedLink[] = {0,0};
     int mouseX;
     int mouseY;
     
@@ -48,15 +49,16 @@ public class Graph extends JPanel {
                 if (nodeIndex != -1 && e.getButton() == 1 && makingWeight) { // Left click, node is hovered, and making link is true
                     nodesList.get(rClickedNodeIndex).createLink(nodeIndex, 10);
                     makingWeight = false;
-                }
-                if (nodeIndex != -1 && e.getButton() == 1) { // Left click and node is hovered
+                } else if (nodeIndex != -1 && e.getButton() == 1) { // Left click and node is hovered
                     draggedNodeIndex = nodeIndex;
+                } else if (e.getButton() == 1 && hoveringLine) {
+                    setLinkWeight();
                 }
-                
                 if (e.getButton() == 3 && nodeIndex != -1) {  // Right click and node is hovered
                     rClickedNodeIndex = nodeIndex;
                     rClickMenu.show(Graph.this, e.getX(), e.getY()); 
-                }
+                } 
+                
                 repaint();
             }
 
@@ -94,35 +96,31 @@ public class Graph extends JPanel {
     
     private void paintWeight(Graphics2D g2d) {
         g2d.setStroke(new BasicStroke(textSize/5));
-        
+        hoveringLine = false; // Reset hovering line
+
         for (int n=0; n<nodesList.size(); n++) {
-            for (int i=0; i<nodesList.get(n).getWeightSize(); i++) {
-                System.out.println("n: "+n);
-                System.out.println("i: "+i);
+            for (int i=0; i<nodesList.get(n).getLinkSize(); i++) {
+                //System.out.println("n: "+n);
+                //System.out.println("i: "+i);
                
-                int xInitial = nodesList.get(n).getX()+nodeRadius;
+                int xInitial = nodesList.get(n).getX()+nodeRadius;  
                 int yInitial = nodesList.get(n).getY()+nodeRadius;
-                int xFinal = nodesList.get(nodesList.get(n).getWeightTo(i)).getX()+nodeRadius;
-                int yFinal = nodesList.get(nodesList.get(n).getWeightTo(i)).getY()+nodeRadius;
+                int xFinal = nodesList.get(nodesList.get(n).getLinkTo(i)).getX()+nodeRadius;
+                int yFinal = nodesList.get(nodesList.get(n).getLinkTo(i)).getY()+nodeRadius;
                 g2d.setColor(Color.BLACK);
                 g2d.draw(new Line2D.Float(xInitial, yInitial, xFinal, yFinal));
 
-                double dist = Line2D.ptSegDist(xInitial, yInitial, xFinal, yFinal, mouseX, mouseY); // Functional to check the distance between a line and a point
-                if (dist <= 15.0) { // Within 5 pixels of the line
-                    System.out.println("Hovering over line");  
-                    openWeightMenu((xInitial+xFinal)/2, (yInitial+yFinal)/2);
+                double distL = Line2D.ptSegDist(xInitial, yInitial, xFinal, yFinal, mouseX, mouseY); // Function to check the distance between a line and a point
+                if (distL <= 10.0) { // Within 10 pixels of the line 
+                    hoveringLine = true; 
+                    selectedLink[0] = n; // Store the node index
+                    selectedLink[1] = i; // Store the link index
                 }
                     
                 g2d.setColor(Color.WHITE);
                 g2d.drawString(Integer.toString(nodesList.get(n).getWeightInt(i)), (xInitial+xFinal)/2, (yInitial+yFinal)/2);
             }
             
-        }
-    }
-    private void openWeightMenu(int x, int y) {
-        weightMenu.add(weightTextArea);
-        if (!weightMenu.isShowing()) {
-            weightMenu.show(Graph.this, x, y);
         }
     }
 
@@ -155,7 +153,6 @@ public class Graph extends JPanel {
                 return n;
             } else {
                 setNodeColour(n, Color.WHITE);
-                
             }
         }
         repaint();
@@ -173,11 +170,11 @@ public class Graph extends JPanel {
 
     private void updateNodes(int deletedNode) { // Called after node is deleted to update names 
         for (int n=0; n<nodesList.size(); n++) {
-            for (int i=0; i<nodesList.get(n).getWeightSize(); i++) {
-                if (nodesList.get(n).getWeightTo(i) == deletedNode) {
+            for (int i=0; i<nodesList.get(n).getLinkSize(); i++) {
+                if (nodesList.get(n).getLinkTo(i) == deletedNode) {
                     nodesList.get(n).deleteLink(i);
-                } else if (nodesList.get(n).getWeightTo(i) > deletedNode) {
-                    nodesList.get(n).decreseWeightToNode(i);
+                } else if (nodesList.get(n).getLinkTo(i) > deletedNode) {
+                    nodesList.get(n).decreseLinkToNode(i);
                 }
             }
         }
@@ -192,5 +189,24 @@ public class Graph extends JPanel {
         textSize = (int)Math.floor(24*multiplyer);
         repaint();
     }
-
+    private void setLinkWeight() {
+        JDialog dialog = new JDialog();
+        dialog.setTitle("Weight Edit");
+        dialog.setSize(250, 100);
+        dialog.setLocationRelativeTo(null); // Center on screen
+        dialog.add(new JLabel("Enter the new value of the weight", SwingConstants.CENTER), BorderLayout.NORTH);
+        dialog.add(weightTextField, BorderLayout.CENTER);
+        dialog.setModal(true); // Block input to other windows
+        JButton okButton = new JButton("OK");
+        okButton.addActionListener(e -> dialog.dispose());
+        dialog.add(okButton, BorderLayout.SOUTH);
+        dialog.getRootPane().setDefaultButton(okButton); // Closes the dialog box when Enter is pressed
+        dialog.setVisible(true);
+        try {
+            int weight = Integer.parseInt(weightTextField.getText());
+            nodesList.get(selectedLink[0]).setLinkWeight(selectedLink[1], weight);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid weight value. Please enter a number.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 }

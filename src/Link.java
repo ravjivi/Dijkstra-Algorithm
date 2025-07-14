@@ -1,15 +1,19 @@
-public class Weight {
+public class Link {
     private int toNode;
     private int weight;
 
-    public Weight(int to, int weight) {
+    public Link(int to, int weight) {
         this.toNode = to;
         this.weight = weight;
     }
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
     public int getToNode() {
         return this.toNode;
     }
-    public void decreaseToNode() {
+    public void decreaseLinkToNode() {
         this.toNode--;
     }
 
