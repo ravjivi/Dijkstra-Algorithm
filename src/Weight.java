@@ -9,5 +9,12 @@ public class Weight {
     public int getToNode() {
         return this.toNode;
     }
+    public void decreaseToNode() {
+        this.toNode--;
+    }
+
+    public int getWeight() {
+        return this.weight;
+    }
 
 }

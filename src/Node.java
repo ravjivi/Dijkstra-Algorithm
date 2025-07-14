@@ -19,6 +19,12 @@ public class Node {
     public void createLink(int to, int weight) {
         weightsList.add(new Weight(to, weight));
     }
+    public void deleteLink(int index) {
+        weightsList.remove(index);
+    }
+    public void decreseWeightToNode(int n) {
+        weightsList.get(n).decreaseToNode();
+    }
 
     public void setX(int x) {
         this.xPos = x;
@@ -28,6 +34,9 @@ public class Node {
     }
     public void setColor(Color c) {
         this.colour = c;
+    }
+    public void setName(String n) {
+        this.name = n;
     }
     
     public String getName() {
@@ -45,8 +54,11 @@ public class Node {
     public int getWeightSize() {
         return weightsList.size();
     }
-    public int getWeightTo(int n) {
+    public int getWeightTo(int n) { 
         return weightsList.get(n).getToNode();
+    }
+    public int getWeightInt(int n) {
+        return weightsList.get(n).getWeight();
     }
     
 }

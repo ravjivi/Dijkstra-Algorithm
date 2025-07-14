@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+
 import java.awt.*;
 import java.awt.event.*;  
 
@@ -7,6 +9,7 @@ public class GUI extends JFrame implements ActionListener {
     /* Class Variables */
     private final Dimension SCREENSIZE = Toolkit.getDefaultToolkit().getScreenSize(); // Get device screen size
     private JMenuBar menuBar;
+    private JSlider slider;
     private JMenu menuFile;
     private JMenu menuEdit;
     private JMenuItem newGraph;
@@ -41,6 +44,8 @@ public class GUI extends JFrame implements ActionListener {
     }
 
     private void addElements() {
+        g = new Graph();
+
         menuBar = new JMenuBar();
         menuBar.setBorder(BorderFactory.createEmptyBorder());
 	    menuBar.setBackground(menuBarColor);
@@ -62,8 +67,10 @@ public class GUI extends JFrame implements ActionListener {
         menuEdit.add(newNode);
         menuBar.add(menuFile);
         menuBar.add(menuEdit);
+
+        menuBar.add(Box.createHorizontalGlue());
+    
         
-        g = new Graph();
         this.add(g, BorderLayout.CENTER);
         this.setJMenuBar(menuBar);
     }
