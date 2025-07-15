@@ -6,6 +6,8 @@ public class Node {
     private int xPos;
     private int yPos;
     private Color colour;
+    private int cost;
+    private boolean visited;
 
     ArrayList<Link> linksList;
 
@@ -41,6 +43,12 @@ public class Node {
     public void setName(String n) {
         this.name = n;
     }
+    public void setCost(int c) {
+        this.cost = c;
+    }
+    public void setVisited(boolean v) {
+        this.visited = v;
+    }
     
     public String getName() {
         return this.name;
@@ -59,6 +67,9 @@ public class Node {
     }
     public int getLinkTo(int n) { 
         return linksList.get(n).getToNode();
+    }
+    public String getLinkToString(int n) { 
+        return linksList.get(n).getToNodeString();
     }
     public int getWeightInt(int n) {
         return linksList.get(n).getWeight();

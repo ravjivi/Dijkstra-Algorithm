@@ -2,9 +2,6 @@ import java.awt.*;
 import java.awt.geom.Line2D;
 import javax.swing.*;
 import java.awt.event.*;
-
-
-
 import java.util.ArrayList;
 
 public class Graph extends JPanel {
@@ -162,6 +159,7 @@ public class Graph extends JPanel {
     public void createNodeGraph() {
         nodesList.add(new Node(nodeNames[nodesList.size()], 50+(100*(nodesList.size())), 50));
         repaint();
+        System.out.println("");
     }
 
     public void setNodeColour(int n, Color c) {
@@ -197,8 +195,10 @@ public class Graph extends JPanel {
         dialog.add(new JLabel("Enter the new value of the weight", SwingConstants.CENTER), BorderLayout.NORTH);
         dialog.add(weightTextField, BorderLayout.CENTER);
         dialog.setModal(true); // Block input to other windows
+        
         JButton okButton = new JButton("OK");
         okButton.addActionListener(e -> dialog.dispose());
+
         dialog.add(okButton, BorderLayout.SOUTH);
         dialog.getRootPane().setDefaultButton(okButton); // Closes the dialog box when Enter is pressed
         dialog.setVisible(true);
@@ -208,5 +208,9 @@ public class Graph extends JPanel {
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Invalid weight value. Please enter a number.", "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    public ArrayList<Node> getNodesList() {
+        return nodesList;
     }
 }

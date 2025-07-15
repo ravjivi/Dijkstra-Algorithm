@@ -6,6 +6,7 @@ public class Link {
         this.toNode = to;
         this.weight = weight;
     }
+
     public void setWeight(int weight) {
         this.weight = weight;
     }
@@ -13,6 +14,13 @@ public class Link {
     public int getToNode() {
         return this.toNode;
     }
+
+    public String getToNodeString() {
+        String[] nodeNames = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", 
+            "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
+        return nodeNames[this.toNode];
+    }
+
     public void decreaseLinkToNode() {
         this.toNode--;
     }

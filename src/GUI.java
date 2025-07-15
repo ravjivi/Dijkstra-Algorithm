@@ -9,13 +9,14 @@ public class GUI extends JFrame implements ActionListener {
     /* Class Variables */
     private final Dimension SCREENSIZE = Toolkit.getDefaultToolkit().getScreenSize(); // Get device screen size
     private JMenuBar menuBar;
-    private JSlider slider;
     private JMenu menuFile;
     private JMenu menuEdit;
+    private JMenu menuRun;
     private JMenuItem newGraph;
     private JMenuItem openGraph;
     private JMenuItem saveGraph;
     private JMenuItem newNode;
+    private JMenuItem runDijkstra;
     private Graph g;
 
     private final Color menuBarColor = new Color(50,50,50);
@@ -53,6 +54,9 @@ public class GUI extends JFrame implements ActionListener {
 	    menuFile.setForeground(menuItemColor);
         menuEdit = new JMenu("Edit");
 	    menuEdit.setForeground(menuItemColor);
+        menuRun = new JMenu("Run");
+        menuRun.setForeground(menuItemColor);
+        
         newGraph = new JMenuItem("New Graph");
         newGraph.addActionListener(this);
         openGraph = new JMenuItem("Open Graph");
@@ -61,16 +65,18 @@ public class GUI extends JFrame implements ActionListener {
         saveGraph.addActionListener(this);
         newNode = new JMenuItem("New Node");
         newNode.addActionListener(this);
+        runDijkstra = new JMenuItem("Run Dijkstra's Algorithm");
+        runDijkstra.addActionListener(this);
+
         menuFile.add(newGraph);
         menuFile.add(openGraph);
         menuFile.add(saveGraph);
         menuEdit.add(newNode);
+        menuRun.add(runDijkstra);
         menuBar.add(menuFile);
         menuBar.add(menuEdit);
+        menuBar.add(menuRun);
 
-        menuBar.add(Box.createHorizontalGlue());
-    
-        
         this.add(g, BorderLayout.CENTER);
         this.setJMenuBar(menuBar);
     }
@@ -88,7 +94,11 @@ public class GUI extends JFrame implements ActionListener {
                 break;
             case "New Node":
                 g.createNodeGraph();
+                System.out.println("");
                 break;
+            case "Run Dijkstra's Algorithm":
+                System.out.println("running Dijkstra's Algorithm");
+                new Algorithm(g);
             default:
                 break;
         }
