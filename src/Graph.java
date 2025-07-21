@@ -17,6 +17,7 @@ public class Graph extends JPanel {
     private JTextField weightTextField = new JTextField(Integer.toString(10), 2);
     private boolean hoveringLine = false;
     private int selectedLink[] = {0,0};
+    private int startNodeIndex = 0;
     int mouseX;
     int mouseY;
     
@@ -27,15 +28,22 @@ public class Graph extends JPanel {
         JPopupMenu rClickMenu = new JPopupMenu();
         JMenuItem infoItem1 = new JMenuItem("Create link");
         JMenuItem infoItem2 = new JMenuItem("Delete Node");
+        JMenuItem infoItem3 = new JMenuItem("Make Start Node");
         
         rClickMenu.add(infoItem1);
         rClickMenu.add(infoItem2);
+        rClickMenu.add(infoItem3);
         infoItem1.addActionListener(e -> { // Add link
             System.out.println("Weight");
             makingWeight = true;
         });
         infoItem2.addActionListener(e -> { // Delete Node
             updateNodes(rClickedNodeIndex);
+            repaint(); // Refresh canvas
+        });
+        infoItem3.addActionListener(e -> { // Delete Node
+            nodesList.get(rClickedNodeIndex).setColor(Color.BLUE);
+            startNodeIndex = rClickedNodeIndex;
             repaint(); // Refresh canvas
         });
         // Add mouse listeners
@@ -149,7 +157,12 @@ public class Graph extends JPanel {
                 repaint();
                 return n;
             } else {
-                setNodeColour(n, Color.WHITE);
+                if (n == startNodeIndex) {
+                    setNodeColour(n, Color.BLUE);
+                } else {
+                    setNodeColour(n, Color.WHITE);
+                }
+                
             }
         }
         repaint();

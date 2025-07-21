@@ -8,6 +8,7 @@ public class Node {
     private Color colour;
     private int cost;
     private boolean visited;
+    private Node previousNode;
 
     ArrayList<Link> linksList;
 
@@ -49,6 +50,9 @@ public class Node {
     public void setVisited(boolean v) {
         this.visited = v;
     }
+    public void setPreviousNode(Node n) {
+        this.previousNode = n;
+    }
     
     public String getName() {
         return this.name;
@@ -73,6 +77,12 @@ public class Node {
     }
     public int getWeightInt(int n) {
         return linksList.get(n).getWeight();
+    }
+    public boolean getVisted() {
+        return this.visited;
+    }
+    public int getCost() {
+        return this.cost;
     }
     
 }
