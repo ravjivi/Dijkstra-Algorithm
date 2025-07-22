@@ -173,6 +173,10 @@ public class Graph extends JPanel {
         nodesList.add(new Node(nodeNames[nodesList.size()], 50+(100*(nodesList.size())), 50));
         repaint();
     }
+    public void createNodeGraph(String name, int xPos, int yPos) {
+        nodesList.add(new Node(name, xPos, yPos));
+        repaint();
+    }
 
     public void setNodeColour(int n, Color c) {
         nodesList.get(n).setColor(c);

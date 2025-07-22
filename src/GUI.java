@@ -100,6 +100,9 @@ public class GUI extends JFrame implements ActionListener {
             default:
                 break;
         }
+    }
 
+    public Graph returnGraph() {
+        return g;
     }
 }
