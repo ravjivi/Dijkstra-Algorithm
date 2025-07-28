@@ -2,18 +2,17 @@ import java.util.ArrayList;
 
 public class Queue {
     private ArrayList<Node> queueList;
-    private Node frontNode;
-    private Node backNode;
 
     public Queue() {
         queueList = new ArrayList<>();
-        frontNode = null;
-        backNode= null;
     }
 
     public void enqueue(Node addNode) {
-        queueList.add(addNode);
-        backNode = addNode;
+        int i = 0;
+        while (i < queueList.size() && (queueList.get(i).getCost() <= addNode.getCost())) {
+            i++;
+        }
+        queueList.add(i, addNode);
     }
 
     public Node dequeue() {
@@ -21,13 +20,12 @@ public class Queue {
             return null;
         }
         Node node = queueList.get(0);
-        queueList.remove(frontNode);
-        frontNode = queueList.get(0);
+        queueList.remove(node);
         return node;
     }
 
     public boolean isEmpty() {
-        return (frontNode == backNode);
+        return queueList.isEmpty();
     }
 
     public Node peek() {

@@ -45,8 +45,8 @@ public class Algorithm {
     }
 
     public void runDijkstra() {
-        PQueue queue = new PQueue();
-        queue.enqueue(startNode,false);
+        Queue queue = new Queue();
+        queue.enqueue(startNode);
 
         while (!queue.isEmpty()) {
             Node currentNode = queue.dequeue();
@@ -60,7 +60,7 @@ public class Algorithm {
                         nextNode.setCost(thisCost);
                         nextNode.setPreviousNode(currentNode);
                         
-                        queue.enqueue(nextNode, true);
+                        queue.enqueue(nextNode);
                         System.out.println("Queued " + (nextNode.getName()));
                     }
                 }
