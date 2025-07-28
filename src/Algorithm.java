@@ -3,6 +3,7 @@ import java.util.ArrayList;
 public class Algorithm {
     private ArrayList<Node> nodeList;
     private Node startNode;
+    private Node endNode;
 
     public Algorithm (Graph g) {
         nodeList = g.getNodesList();
@@ -34,10 +35,13 @@ public class Algorithm {
 
     public void setupAlgorithm() {
         for (int n=0; n<nodeList.size(); n++) {
-            if (nodeList.get(n).getColor() == Color.BLUE) { // If node is start node
+            if (nodeList.get(n).getColor() == Color.GREEN) { // If node is start node
                 nodeList.get(n).setCost(0);
                 startNode = nodeList.get(n);
-            } else {
+            } else if (nodeList.get(n).getColor() == Color.RED) {
+                endNode = nodeList.get(n);
+            }
+            else {
                 nodeList.get(n).setCost(Integer.MAX_VALUE);
             }
             nodeList.get(n).setVisited(false);

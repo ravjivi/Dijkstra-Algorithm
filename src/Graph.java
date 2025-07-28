@@ -18,6 +18,7 @@ public class Graph extends JPanel {
     private boolean hoveringLine = false;
     private int selectedLink[] = {0,0};
     private Node startNode;
+    private Node endNode;
     private boolean lockGraph = false;
     int mouseX;
     int mouseY;
@@ -30,12 +31,13 @@ public class Graph extends JPanel {
         JMenuItem infoItem1 = new JMenuItem("Create link");
         JMenuItem infoItem2 = new JMenuItem("Delete Node");
         JMenuItem infoItem3 = new JMenuItem("Make Start Node");
+        JMenuItem infoItem4 = new JMenuItem("Make End Node");
         
         rClickMenu.add(infoItem1);
         rClickMenu.add(infoItem2);
         rClickMenu.add(infoItem3);
+        rClickMenu.add(infoItem4);
         infoItem1.addActionListener(e -> { // Add link
-            System.out.println("Weight");
             makingWeight = true;
         });
         infoItem2.addActionListener(e -> { // Delete Node
@@ -43,9 +45,19 @@ public class Graph extends JPanel {
             repaint(); // Refresh canvas
         });
         infoItem3.addActionListener(e -> { // Make this the new start node
-            startNode.setColor(Color.WHITE);
+            if (startNode != null) {
+                startNode.setColor(Color.WHITE);
+            }
             startNode = rClickedNode;
-            startNode.setColor(Color.BLUE);
+            startNode.setColor(Color.GREEN);
+            repaint(); // Refresh canvas
+        });
+        infoItem4.addActionListener(e -> { // Make this the new end node
+            if (endNode != null) {
+                endNode.setColor(Color.WHITE);
+            }
+            endNode = rClickedNode;
+            endNode.setColor(Color.RED);
             repaint(); // Refresh canvas
         });
         // Add mouse listeners
@@ -90,7 +102,6 @@ public class Graph extends JPanel {
                 if (!lockGraph) {
                     checkNodeHover(mouseX, mouseY);
                 }
-                
             }
         });
         
@@ -109,10 +120,7 @@ public class Graph extends JPanel {
         hoveringLine = false; // Reset hovering line
 
         for (int n=0; n<nodesList.size(); n++) {
-            for (int i=0; i<nodesList.get(n).getLinkSize(); i++) {
-                //System.out.println("n: "+n);
-                //System.out.println("i: "+i);
-               
+            for (int i=0; i<nodesList.get(n).getLinkSize(); i++) {               
                 int xInitial = nodesList.get(n).getX()+nodeRadius;  
                 int yInitial = nodesList.get(n).getY()+nodeRadius;
                 int xFinal = nodesList.get(n).getLinkTo(i).getX()+nodeRadius;
@@ -163,7 +171,9 @@ public class Graph extends JPanel {
                 return n;
             } else {
                 if (nodesList.get(n) == startNode) {
-                    setNodeColour(n, Color.BLUE);
+                    setNodeColour(n, Color.GREEN);
+                } else if (nodesList.get(n) == endNode) {
+                    setNodeColour(n, Color.RED);
                 } else {
                     setNodeColour(n, Color.WHITE);
                 }
@@ -178,7 +188,7 @@ public class Graph extends JPanel {
         nodesList.add(new Node(nodeNames[nodesList.size()], 50, 50));
         if (nodesList.getFirst() == nodesList.getLast()) {
             startNode = nodesList.get(0);
-            startNode.setColor(Color.BLUE);
+            startNode.setColor(Color.GREEN);
         }
         repaint();
     }

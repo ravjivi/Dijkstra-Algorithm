@@ -24,7 +24,7 @@ public class CSVEditor {
                     String[] tempLine = line.split(","); // Split the line by the commas
                     g.createNodeGraph(tempLine[0], Integer.parseInt(tempLine[1]), Integer.parseInt(tempLine[2]));
                     if (tempLine[0].equals(startNodeChar)) {
-                        nodesList.getLast().setColor(Color.BLUE);
+                        nodesList.getLast().setColor(Color.GREEN);
                         g.setStartNode(nodesList.getLast());
                     }
                 }
