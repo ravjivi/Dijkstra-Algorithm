@@ -4,12 +4,12 @@ public class Algorithm {
     private ArrayList<Node> nodeList;
     private Node startNode;
 
-    public Algorithm (Graph graph) {
-        nodeList = graph.getNodesList();
+    public Algorithm (Graph g) {
+        nodeList = g.getNodesList();
         setupAlgorithm();
         twoWayLinks();
         printGraph();
-        runDijkstra();
+        runDijkstra(g);
     }
 
     public void twoWayLinks() {
@@ -44,15 +44,14 @@ public class Algorithm {
         }
     }
 
-    public void runDijkstra() {
+    public void runDijkstra(Graph g) {
+        g.toggleGraphLock();
         Queue queue = new Queue();
         queue.enqueue(startNode);
 
         while (!queue.isEmpty()) {
             Node currentNode = queue.dequeue();
-            System.out.println("Current Node: "+currentNode.getName());
             if (!currentNode.getVisted()) {
-                System.out.println("Running " + (currentNode.getName()));
                 for (int i=0; i<currentNode.getLinkSize(); i++) {
                     int thisCost = currentNode.getCost() + currentNode.getWeight(i);
                     Node nextNode = currentNode.getLinkTo(i);
@@ -61,13 +60,36 @@ public class Algorithm {
                         nextNode.setPreviousNode(currentNode);
                         
                         queue.enqueue(nextNode);
-                        System.out.println("Queued " + (nextNode.getName()));
+                    }
+
+                    System.out.println("stop");
+                    currentNode.setLinkColor(i, Color.GREEN);
+                    for (int k=0; k<nextNode.getLinkSize(); k++) {
+                        if (nextNode.getLinkTo(k) == currentNode) {
+                            nextNode.setLinkColor(k, Color.GREEN);
+                        }
+                    }
+                    currentNode.setColor(Color.YELLOW);
+                    g.repaint();
+                    try {
+                        Thread.sleep(1000);
+                        
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("start");
+                    currentNode.setLinkColor(i, Color.BLACK);
+                    currentNode.setColor(Color.WHITE);
+                    for (int k=0; k<nextNode.getLinkSize(); k++) {
+                        if (nextNode.getLinkTo(k) == currentNode) {
+                            nextNode.setLinkColor(k, Color.BLACK);
+                        }
                     }
                 }
                 currentNode.setVisited(true);
-                System.out.println("Set visited: " + (currentNode.getName()));
             }
         }
+        g.toggleGraphLock();
         System.out.println("Djikstra done");
     }
 

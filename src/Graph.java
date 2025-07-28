@@ -18,6 +18,7 @@ public class Graph extends JPanel {
     private boolean hoveringLine = false;
     private int selectedLink[] = {0,0};
     private Node startNode;
+    private boolean lockGraph = false;
     int mouseX;
     int mouseY;
     
@@ -86,7 +87,10 @@ public class Graph extends JPanel {
             public void mouseMoved(MouseEvent e) {
                 mouseX = e.getX();
                 mouseY = e.getY();
-                checkNodeHover(mouseX, mouseY);
+                if (!lockGraph) {
+                    checkNodeHover(mouseX, mouseY);
+                }
+                
             }
         });
         
@@ -171,7 +175,7 @@ public class Graph extends JPanel {
     }
 
     public void createNodeGraph() {
-        nodesList.add(new Node(nodeNames[nodesList.size()], 50+(100*(nodesList.size())), 50));
+        nodesList.add(new Node(nodeNames[nodesList.size()], 50, 50));
         if (nodesList.getFirst() == nodesList.getLast()) {
             startNode = nodesList.get(0);
             startNode.setColor(Color.BLUE);
@@ -231,5 +235,12 @@ public class Graph extends JPanel {
 
     public ArrayList<Node> getNodesList() {
         return nodesList;
+    } 
+    public void toggleGraphLock() {
+        if (lockGraph) {
+            lockGraph = false;
+        } else {
+            lockGraph = true;
+        }
     }
 }

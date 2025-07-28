@@ -100,7 +100,10 @@ public class GUI extends JFrame implements ActionListener {
                 break;
             case "Run Dijkstra's Algorithm":    
                 System.out.println("running Dijkstra's Algorithm");
-                new Algorithm(g);
+                new Thread(() -> {
+                    new Algorithm(g);
+                }).start();
+                
             default:
                 break;
         }
