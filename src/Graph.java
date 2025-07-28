@@ -11,13 +11,13 @@ public class Graph extends JPanel {
     private String[] nodeNames = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", 
     "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
     private ArrayList<Node> nodesList = new ArrayList<Node>();
-    private int draggedNodeIndex = -1;
-    private int rClickedNodeIndex = -1;
+    private Node draggedNode;
+    private Node rClickedNode;
     private boolean makingWeight = false;
     private JTextField weightTextField = new JTextField(Integer.toString(10), 2);
     private boolean hoveringLine = false;
     private int selectedLink[] = {0,0};
-    private int startNodeIndex = 0;
+    private Node startNode;
     int mouseX;
     int mouseY;
     
@@ -38,12 +38,13 @@ public class Graph extends JPanel {
             makingWeight = true;
         });
         infoItem2.addActionListener(e -> { // Delete Node
-            updateNodes(rClickedNodeIndex);
+            updateNodes(rClickedNode);
             repaint(); // Refresh canvas
         });
-        infoItem3.addActionListener(e -> { // Delete Node
-            nodesList.get(rClickedNodeIndex).setColor(Color.BLUE);
-            startNodeIndex = rClickedNodeIndex;
+        infoItem3.addActionListener(e -> { // Make this the new start node
+            startNode.setColor(Color.WHITE);
+            startNode = rClickedNode;
+            startNode.setColor(Color.BLUE);
             repaint(); // Refresh canvas
         });
         // Add mouse listeners
@@ -52,15 +53,15 @@ public class Graph extends JPanel {
             public void mousePressed(MouseEvent e) {
                 int nodeIndex = checkNodeHover(e.getX(), e.getY());
                 if (nodeIndex != -1 && e.getButton() == 1 && makingWeight) { // Left click, node is hovered, and making link is true
-                    nodesList.get(rClickedNodeIndex).createLink(nodeIndex, 10);
+                    rClickedNode.createLink(nodesList.get(nodeIndex), 10);
                     makingWeight = false;
                 } else if (nodeIndex != -1 && e.getButton() == 1) { // Left click and node is hovered
-                    draggedNodeIndex = nodeIndex;
+                    draggedNode = nodesList.get(nodeIndex);
                 } else if (e.getButton() == 1 && hoveringLine) {
                     setLinkWeight();
                 }
                 if (e.getButton() == 3 && nodeIndex != -1) {  // Right click and node is hovered
-                    rClickedNodeIndex = nodeIndex;
+                    rClickedNode = nodesList.get(nodeIndex);
                     rClickMenu.show(Graph.this, e.getX(), e.getY()); 
                 } 
                 
@@ -69,16 +70,16 @@ public class Graph extends JPanel {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                draggedNodeIndex = -1;
+                draggedNode = null;
             }
         });
 
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                if (draggedNodeIndex != -1) {
-                    nodesList.get(draggedNodeIndex).setX(e.getX() - nodeRadius);
-                    nodesList.get(draggedNodeIndex).setY(e.getY() - nodeRadius);
+                if (draggedNode != null) {
+                    draggedNode.setX(e.getX() - nodeRadius);
+                    draggedNode.setY(e.getY() - nodeRadius);
                     repaint();
                 }
             }
@@ -110,9 +111,9 @@ public class Graph extends JPanel {
                
                 int xInitial = nodesList.get(n).getX()+nodeRadius;  
                 int yInitial = nodesList.get(n).getY()+nodeRadius;
-                int xFinal = nodesList.get(nodesList.get(n).getLinkTo(i)).getX()+nodeRadius;
-                int yFinal = nodesList.get(nodesList.get(n).getLinkTo(i)).getY()+nodeRadius;
-                g2d.setColor(Color.BLACK);
+                int xFinal = nodesList.get(n).getLinkTo(i).getX()+nodeRadius;
+                int yFinal = nodesList.get(n).getLinkTo(i).getY()+nodeRadius;
+                g2d.setColor(nodesList.get(n).getLinkColor(i));
                 g2d.draw(new Line2D.Float(xInitial, yInitial, xFinal, yFinal));
 
                 double distL = Line2D.ptSegDist(xInitial, yInitial, xFinal, yFinal, mouseX, mouseY); // Function to check the distance between a line and a point
@@ -123,7 +124,7 @@ public class Graph extends JPanel {
                 }
                     
                 g2d.setColor(Color.WHITE);
-                g2d.drawString(Integer.toString(nodesList.get(n).getWeightInt(i)), (xInitial+xFinal)/2, (yInitial+yFinal)/2);
+                g2d.drawString(Integer.toString(nodesList.get(n).getWeight(i)), (xInitial+xFinal)/2, (yInitial+yFinal)/2);
             }
             
         }
@@ -157,7 +158,7 @@ public class Graph extends JPanel {
                 repaint();
                 return n;
             } else {
-                if (n == startNodeIndex) {
+                if (nodesList.get(n) == startNode) {
                     setNodeColour(n, Color.BLUE);
                 } else {
                     setNodeColour(n, Color.WHITE);
@@ -171,8 +172,13 @@ public class Graph extends JPanel {
 
     public void createNodeGraph() {
         nodesList.add(new Node(nodeNames[nodesList.size()], 50+(100*(nodesList.size())), 50));
+        if (nodesList.getFirst() == nodesList.getLast()) {
+            startNode = nodesList.get(0);
+            startNode.setColor(Color.BLUE);
+        }
         repaint();
     }
+
     public void createNodeGraph(String name, int xPos, int yPos) {
         nodesList.add(new Node(name, xPos, yPos));
         repaint();
@@ -181,28 +187,22 @@ public class Graph extends JPanel {
     public void setNodeColour(int n, Color c) {
         nodesList.get(n).setColor(c);
     }
-
-    private void updateNodes(int deletedNode) { // Called after node is deleted to update names 
+    
+    private void updateNodes(Node deletedNode) { // Called after node is deleted to update names 
         for (int n=0; n<nodesList.size(); n++) {
             for (int i=0; i<nodesList.get(n).getLinkSize(); i++) {
                 if (nodesList.get(n).getLinkTo(i) == deletedNode) {
                     nodesList.get(n).deleteLink(i);
-                } else if (nodesList.get(n).getLinkTo(i) > deletedNode) {
-                    nodesList.get(n).decreseLinkToNode(i);
-                }
+                } 
             }
         }
         nodesList.remove(deletedNode); // Delete Node
-        for (int i=rClickedNodeIndex; i<nodesList.size(); i++) {
+        for (int i=nodesList.indexOf(deletedNode)+1; i<nodesList.size(); i++) {
             nodesList.get(i).setName(nodeNames[i]);
         }
-    }
+        
+    } 
 
-    public void changeNodeSize(double multiplyer) {
-        nodeRadius = (int)Math.floor(50*multiplyer);
-        textSize = (int)Math.floor(24*multiplyer);
-        repaint();
-    }
     private void setLinkWeight() {
         JDialog dialog = new JDialog();
         dialog.setTitle("Weight Edit");
@@ -225,7 +225,10 @@ public class Graph extends JPanel {
             JOptionPane.showMessageDialog(this, "Invalid weight value. Please enter a number.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+    public void setStartNode(Node n) {
+        startNode = n;
+    }
+
     public ArrayList<Node> getNodesList() {
         return nodesList;
     }

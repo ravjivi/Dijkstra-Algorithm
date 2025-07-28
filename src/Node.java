@@ -19,19 +19,16 @@ public class Node {
         this.colour = Color.WHITE;
         linksList = new ArrayList<Link>();
     }
-    public void createLink(int to, int weight) {
+    public void createLink(Node to, int weight) {
         linksList.add(new Link(to, weight));
     }
     public void deleteLink(int index) {
         linksList.remove(index);
     }
-    public void decreseLinkToNode(int n) {
-        linksList.get(n).decreaseLinkToNode();
-    }
+
     public void setLinkWeight(int index, int weight) {
         linksList.get(index).setWeight(weight);
     }
-
     public void setX(int x) {
         this.xPos = x;
     }
@@ -53,6 +50,9 @@ public class Node {
     public void setPreviousNode(Node n) {
         this.previousNode = n;
     }
+    public void setLinkColor (int n, Color c) {
+        linksList.get(n).setColor(c);
+    }
     
     public String getName() {
         return this.name;
@@ -69,13 +69,10 @@ public class Node {
     public int getLinkSize() {
         return linksList.size();
     }
-    public int getLinkTo(int n) { 
+    public Node getLinkTo(int n) { 
         return linksList.get(n).getToNode();
     }
-    public String getLinkToString(int n) { 
-        return linksList.get(n).getToNodeString();
-    }
-    public int getWeightInt(int n) {
+    public int getWeight(int n) {
         return linksList.get(n).getWeight();
     }
     public boolean getVisted() {
@@ -83,6 +80,9 @@ public class Node {
     }
     public int getCost() {
         return this.cost;
+    }
+    public Color getLinkColor (int n) {
+        return linksList.get(n).getColor();
     }
     
 }

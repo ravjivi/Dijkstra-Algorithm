@@ -20,6 +20,8 @@ public class GUI extends JFrame implements ActionListener {
     private final Color menuBarColor = new Color(50,50,50);
     private final Color menuItemColor = Color.WHITE;
 
+    private CSVEditor csv = new CSVEditor();
+
     public GUI(String os) {
         createWindow();
         if (os.equals("windows")) {
@@ -87,14 +89,16 @@ public class GUI extends JFrame implements ActionListener {
                 break;
             case "Open Graph":
                 System.out.println("Opening new graph");
+                csv.readCSV(g);
                 break;
             case "Save Graph":
+                csv.writeCSV(g);
                 break;
             case "New Node":
                 g.createNodeGraph();
                 System.out.println("");
                 break;
-            case "Run Dijkstra's Algorithm":
+            case "Run Dijkstra's Algorithm":    
                 System.out.println("running Dijkstra's Algorithm");
                 new Algorithm(g);
             default:

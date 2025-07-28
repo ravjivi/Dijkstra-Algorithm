@@ -1,32 +1,32 @@
+import java.awt.Color;
 public class Link {
-    private int toNode;
+    private Node toNode;
     private int weight;
+    private Color colour;
 
-    public Link(int to, int weight) {
+    public Link(Node to, int weight) {
         this.toNode = to;
         this.weight = weight;
+        this.colour = Color.BLACK;
     }
 
-    public void setWeight(int weight) {
-        this.weight = weight;
+    public void setWeight(int w) {
+        this.weight = w;
+    }
+    public void setColor (Color c) {
+        this.colour = c;
     }
 
-    public int getToNode() {
+    public Node getToNode() {
         return this.toNode;
     }
-
     public String getToNodeString() {
-        String[] nodeNames = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", 
-            "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
-        return nodeNames[this.toNode];
+        return toNode.getName();
     }
-
-    public void decreaseLinkToNode() {
-        this.toNode--;
-    }
-
     public int getWeight() {
         return this.weight;
     }
-
+    public Color getColor() {
+        return this.colour;
+    }
 }

@@ -24,6 +24,8 @@ public class PQueue {
     }
 
     public boolean isEmpty() {
+        System.out.println("High"+highP.isEmpty());
+        System.out.println("Low"+lowP.isEmpty());
         if (highP.isEmpty() && lowP.isEmpty()) {
             return true;
         } else {
