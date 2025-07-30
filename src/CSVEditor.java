@@ -18,6 +18,7 @@ public class CSVEditor {
             while (myReader.hasNextLine()) {
                 nNodes = Integer.parseInt(myReader.nextLine());
                 String startNodeChar = myReader.nextLine();
+                String endNodeChar = myReader.nextLine();
                 
                 for (int i=0; i<nNodes; i++) {
                     String line = myReader.nextLine(); // Read the entire line
@@ -26,6 +27,9 @@ public class CSVEditor {
                     if (tempLine[0].equals(startNodeChar)) {
                         nodesList.getLast().setColor(Color.GREEN);
                         g.setStartNode(nodesList.getLast());
+                    } else if (tempLine[0].equals(endNodeChar)) {
+                        nodesList.getLast().setColor(Color.RED);
+                        g.setEndNode(nodesList.getLast());
                     }
                 }
                 nLinks = Integer.parseInt(myReader.nextLine());

@@ -11,6 +11,7 @@ public class Algorithm {
         twoWayLinks();
         printGraph();
         runDijkstra(g);
+
     }
 
     public void twoWayLinks() {
@@ -35,14 +36,14 @@ public class Algorithm {
 
     public void setupAlgorithm() {
         for (int n=0; n<nodeList.size(); n++) {
+            nodeList.get(n).setCost(Integer.MAX_VALUE);
             if (nodeList.get(n).getColor() == Color.GREEN) { // If node is start node
                 nodeList.get(n).setCost(0);
+                nodeList.get(n).setPreviousNode(null);
                 startNode = nodeList.get(n);
             } else if (nodeList.get(n).getColor() == Color.RED) {
+                System.out.println("End node set");
                 endNode = nodeList.get(n);
-            }
-            else {
-                nodeList.get(n).setCost(Integer.MAX_VALUE);
             }
             nodeList.get(n).setVisited(false);
         }
@@ -52,6 +53,7 @@ public class Algorithm {
         g.toggleGraphLock();
         Queue queue = new Queue();
         queue.enqueue(startNode);
+        int linksVisited = 0; // Links visited
 
         while (!queue.isEmpty()) {
             Node currentNode = queue.dequeue();
@@ -62,11 +64,8 @@ public class Algorithm {
                     if (thisCost < nextNode.getCost()) {
                         nextNode.setCost(thisCost);
                         nextNode.setPreviousNode(currentNode);
-                        
                         queue.enqueue(nextNode);
                     }
-
-                    System.out.println("stop");
                     currentNode.setLinkColor(i, Color.GREEN);
                     for (int k=0; k<nextNode.getLinkSize(); k++) {
                         if (nextNode.getLinkTo(k) == currentNode) {
@@ -75,13 +74,16 @@ public class Algorithm {
                     }
                     currentNode.setColor(Color.YELLOW);
                     g.repaint();
+
+                    /* Sleep Screen */
                     try {
                         Thread.sleep(1000);
                         
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    System.out.println("start");
+                    /* Sleep Screen */
+
                     currentNode.setLinkColor(i, Color.BLACK);
                     currentNode.setColor(Color.WHITE);
                     for (int k=0; k<nextNode.getLinkSize(); k++) {
@@ -89,12 +91,15 @@ public class Algorithm {
                             nextNode.setLinkColor(k, Color.BLACK);
                         }
                     }
+                    linksVisited++;
                 }
                 currentNode.setVisited(true);
             }
         }
         g.toggleGraphLock();
         System.out.println("Djikstra done");
+        AlgorithmSummary as = new AlgorithmSummary();
+        as.showSummary(endNode.getCost(), linksVisited, nodeList);
     }
 
     public void printGraph() {

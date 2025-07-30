@@ -242,6 +242,9 @@ public class Graph extends JPanel {
     public void setStartNode(Node n) {
         startNode = n;
     }
+    public void setEndNode(Node n) {
+        endNode = n;
+    }
 
     public ArrayList<Node> getNodesList() {
         return nodesList;

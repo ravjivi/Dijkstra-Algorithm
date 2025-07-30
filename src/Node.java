@@ -84,5 +84,8 @@ public class Node {
     public Color getLinkColor (int n) {
         return linksList.get(n).getColor();
     }
+    public Node getPreviousNode() {
+        return this.previousNode;
+    }
     
 }
