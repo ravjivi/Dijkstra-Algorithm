@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;  
-
+import java.awt.event.*;
 
 public class GUI extends JFrame implements ActionListener {
     /* Class Variables */
@@ -15,7 +14,10 @@ public class GUI extends JFrame implements ActionListener {
     private JMenuItem saveGraph;
     private JMenuItem newNode;
     private JMenuItem runDijkstra;
+    private JMenu animationSpeed;
+    private JRadioButtonMenuItem[] algorithmSpeedItems;
     private Graph g;
+    private Algorithm a;
 
     private final Color menuBarColor = new Color(50,50,50);
     private final Color menuItemColor = Color.WHITE;
@@ -26,8 +28,14 @@ public class GUI extends JFrame implements ActionListener {
         createWindow();
         if (os.equals("windows")) {
             newNode.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
+            newGraph.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.CTRL_DOWN_MASK));
+            openGraph.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK));
+            saveGraph.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
         } else if (os.equals("mac")) {
             newNode.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.META_DOWN_MASK));
+            newGraph.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.META_DOWN_MASK));
+            openGraph.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.META_DOWN_MASK));
+            saveGraph.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.META_DOWN_MASK));
         }
     }
 
@@ -46,6 +54,7 @@ public class GUI extends JFrame implements ActionListener {
 
     private void addElements() {
         g = new Graph();
+        a = new Algorithm(g);
 
         menuBar = new JMenuBar();
         menuBar.setBorder(BorderFactory.createEmptyBorder());
@@ -56,6 +65,16 @@ public class GUI extends JFrame implements ActionListener {
 	    menuEdit.setForeground(menuItemColor);
         menuRun = new JMenu("Run");
         menuRun.setForeground(menuItemColor);
+
+        ButtonGroup startGroup = new ButtonGroup();
+        algorithmSpeedItems = new JRadioButtonMenuItem[4];
+        for (int i=0; i<4; i++) {
+            algorithmSpeedItems[i] = new JRadioButtonMenuItem(Double.toString(Math.pow(2, i)*0.5)+"x");
+            algorithmSpeedItems[i].addActionListener(this);
+            startGroup.add(algorithmSpeedItems[i]);
+        }
+        algorithmSpeedItems[1].setSelected(true);
+        
         
         newGraph = new JMenuItem("New Graph");
         newGraph.addActionListener(this);
@@ -67,12 +86,18 @@ public class GUI extends JFrame implements ActionListener {
         newNode.addActionListener(this);
         runDijkstra = new JMenuItem("Run Dijkstra's Algorithm");
         runDijkstra.addActionListener(this);
+        animationSpeed = new JMenu("Animation Speed");
+        animationSpeed.add(algorithmSpeedItems[0]);
+        animationSpeed.add(algorithmSpeedItems[1]);
+        animationSpeed.add(algorithmSpeedItems[2]);
+        animationSpeed.add(algorithmSpeedItems[3]);
 
         menuFile.add(newGraph);
         menuFile.add(openGraph);
         menuFile.add(saveGraph);
         menuEdit.add(newNode);
         menuRun.add(runDijkstra);
+        menuRun.add(animationSpeed);
         menuBar.add(menuFile);
         menuBar.add(menuEdit);
         menuBar.add(menuRun);
@@ -86,26 +111,38 @@ public class GUI extends JFrame implements ActionListener {
         switch (cmd) {
             case "New Graph":
                 System.out.println("Create new graph");
+                g.clearAllNode();
                 break;
             case "Open Graph":
-                System.out.println("Opening new graph");
+                System.out.println("Opening graph from CSV");
                 csv.readCSV(g);
                 break;
             case "Save Graph":
+                System.out.println("Saving graph");
                 csv.writeCSV(g);
                 break;
             case "New Node":
+                System.out.println("Creating new node");
                 g.createNodeGraph();
                 System.out.println("");
                 break;
-            case "Run Dijkstra's Algorithm":    
-                System.out.println("running Dijkstra's Algorithm");
-                new Thread(() -> {
-                    new Algorithm(g);
-                }).start();
-                
+            case "Run Dijkstra's Algorithm":  
+                if (g.getStartNode() != null && g.getEndNode() != null && g.getStartNode() != g.getEndNode()) { // Graph has start and end node and they are not the same
+                    System.out.println("running Dijkstra's Algorithm");
+                    new Thread(() -> {
+                        a.setupAlgorithm(g);
+                    }).start();
+                }  else {
+                    g.throwError("Please select a start and end node by right clicking on nodes");
+                }
             default:
                 break;
+        }
+        for (int i=0; i<algorithmSpeedItems.length; i++) {
+            if (cmd == algorithmSpeedItems[i].getText()) {
+                System.out.println("Changing algorithm speed to: "+algorithmSpeedItems[i].getText());
+                a.setAlgorithmSpeed(Math.pow(2, i)*0.5);
+            }
         }
     }
 

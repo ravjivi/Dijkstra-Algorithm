@@ -234,9 +234,14 @@ public class Graph extends JPanel {
         dialog.setVisible(true);
         try {
             int weight = Integer.parseInt(weightTextField.getText());
-            nodesList.get(selectedLink[0]).setLinkWeight(selectedLink[1], weight);
+            if (weight > 0) {
+                nodesList.get(selectedLink[0]).setLinkWeight(selectedLink[1], weight);
+            } else {
+                throwError("Invalid weight value. Please enter a number greater than 0.");
+            }
+            
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Invalid weight value. Please enter a number.", "Error", JOptionPane.ERROR_MESSAGE);
+            throwError("Invalid weight value. Please enter a number.");
         }
     }
     public void setStartNode(Node n) {
@@ -244,6 +249,12 @@ public class Graph extends JPanel {
     }
     public void setEndNode(Node n) {
         endNode = n;
+    }
+    public Node getStartNode() {
+        return startNode;
+    }
+    public Node getEndNode() {
+        return endNode;
     }
 
     public ArrayList<Node> getNodesList() {
@@ -255,5 +266,12 @@ public class Graph extends JPanel {
         } else {
             lockGraph = true;
         }
+    }
+    public void throwError(String text) {
+        JOptionPane.showMessageDialog(this, text, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    public void clearAllNode() {
+        nodesList.clear();
+        repaint();
     }
 }

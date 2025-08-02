@@ -20,7 +20,16 @@ public class Node {
         linksList = new ArrayList<Link>();
     }
     public void createLink(Node to, int weight) {
-        linksList.add(new Link(to, weight));
+        boolean exists = false;
+        for (int i=0; i<linksList.size(); i++) {
+            if (linksList.get(i).getToNode() == to) {
+                exists = true;
+                break; 
+            }
+        }
+        if (!exists) {
+            linksList.add(new Link(to, weight));
+        } 
     }
     public void deleteLink(int index) {
         linksList.remove(index);
@@ -28,6 +37,11 @@ public class Node {
 
     public void setLinkWeight(int index, int weight) {
         linksList.get(index).setWeight(weight);
+        for (int i=0; i<linksList.get(index).getToNode().getLinkSize(); i++) {
+            if (linksList.get(index).getToNode().getLinkToString(i).equals(this.name) && linksList.get(index).getToNode().getWeight(i) != linksList.get(index).getWeight()) {
+                linksList.get(index).getToNode().setLinkWeight(0, weight);
+            }
+        }        
     }
     public void setX(int x) {
         this.xPos = x;
@@ -71,6 +85,9 @@ public class Node {
     }
     public Node getLinkTo(int n) { 
         return linksList.get(n).getToNode();
+    }
+    public String getLinkToString(int n) { 
+        return linksList.get(n).getToNodeString();
     }
     public int getWeight(int n) {
         return linksList.get(n).getWeight();

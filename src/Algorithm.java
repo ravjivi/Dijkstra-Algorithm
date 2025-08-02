@@ -4,14 +4,10 @@ public class Algorithm {
     private ArrayList<Node> nodeList;
     private Node startNode;
     private Node endNode;
+    private int algorithmSpeed = 1000;
 
     public Algorithm (Graph g) {
-        nodeList = g.getNodesList();
-        setupAlgorithm();
-        twoWayLinks();
-        printGraph();
-        runDijkstra(g);
-
+        nodeList = g.getNodesList();  
     }
 
     public void twoWayLinks() {
@@ -34,7 +30,7 @@ public class Algorithm {
         return false;
     }
 
-    public void setupAlgorithm() {
+    public void setupAlgorithm(Graph g) {
         for (int n=0; n<nodeList.size(); n++) {
             nodeList.get(n).setCost(Integer.MAX_VALUE);
             if (nodeList.get(n).getColor() == Color.GREEN) { // If node is start node
@@ -47,6 +43,9 @@ public class Algorithm {
             }
             nodeList.get(n).setVisited(false);
         }
+        twoWayLinks();
+        printGraph();
+        runDijkstra(g);
     }
 
     public void runDijkstra(Graph g) {
@@ -77,7 +76,7 @@ public class Algorithm {
 
                     /* Sleep Screen */
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(algorithmSpeed);
                         
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -109,5 +108,13 @@ public class Algorithm {
                 System.out.println("    "+"From: "+nodeList.get(n).getName()+", To: "+nodeList.get(n).getLinkTo(i).getName()+", Weight: "+nodeList.get(n).getWeight(i));
             }
         }
+    }
+
+    public void setAlgorithmSpeed(double speed) {
+        algorithmSpeed = (int)(1000/speed);
+    }
+
+    private void highlightShortestPath() {
+        endNode.setColor(Color.pink);
     }
 }

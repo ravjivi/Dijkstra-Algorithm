@@ -25,7 +25,11 @@ public class AlgorithmSummary {
 
         panel.add(new JLabel("Algorithm finished."));
         panel.add(Box.createVerticalStrut(10));
-        panel.add(new JLabel("→ Cost to end node: " + endCost));
+        if (endCost == Integer.MAX_VALUE) {
+            panel.add(new JLabel("→ Cost to end node: ∞"));
+        } else {
+            panel.add(new JLabel("→ Cost to end node: " + endCost));
+        }
         panel.add(new JLabel("→ Number of links visited: " + linksVisited));
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -45,6 +49,7 @@ public class AlgorithmSummary {
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
     }
+    
     private void showDetailsTable(ArrayList<Node> nodeslist) {
         int n = nodeslist.size(); // Number of rows 
         int i = 3; // Number of columns
@@ -57,6 +62,9 @@ public class AlgorithmSummary {
         for (int r = 0; r < n; r++) {
             data[r][0] = "Node " + nodeslist.get(r).getName();
             data[r][1] = nodeslist.get(r).getCost();
+            if ((int)data[r][1] == Integer.MAX_VALUE) {
+                data[r][1] = "∞";
+            }
             try {
                 data[r][2] = nodeslist.get(r).getPreviousNode().getName();
             } catch (Exception e) { // If there is no parent node 
