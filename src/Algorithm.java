@@ -97,8 +97,11 @@ public class Algorithm {
         }
         g.toggleGraphLock();
         System.out.println("Djikstra done");
+        highlightShortestPath();
+        g.repaint();
         AlgorithmSummary as = new AlgorithmSummary();
         as.showSummary(endNode.getCost(), linksVisited, nodeList);
+        
     }
 
     public void printGraph() {
@@ -115,6 +118,26 @@ public class Algorithm {
     }
 
     private void highlightShortestPath() {
-        endNode.setColor(Color.pink);
+        Node currentNode = endNode;
+        Node previousNode = endNode.getPreviousNode();
+        while (currentNode != startNode) {
+            currentNode.setColor(Color.MAGENTA);
+
+            for (int i=0; i<previousNode.getLinkSize(); i++) {
+                if (previousNode.getLinkTo(i) == currentNode) {
+                    previousNode.setLinkColor(i, Color.MAGENTA);
+                    for (int k=0; k<currentNode.getLinkSize(); k++) {
+                        if (currentNode.getLinkTo(k) == previousNode) {
+                            currentNode.setLinkColor(k, Color.MAGENTA);
+                        }
+                    }
+                }
+            }
+            currentNode = previousNode;
+            previousNode = previousNode.getPreviousNode();
+            
+        }
+        currentNode.setColor(Color.MAGENTA);
+        
     }
 }

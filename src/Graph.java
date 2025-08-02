@@ -8,20 +8,16 @@ public class Graph extends JPanel {
     private int nodeRadius = 50;
     private final Color textColor = Color.BLACK;
     private int textSize = 24;
-    private String[] nodeNames = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", 
-    "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
+    private char[] nodeNames = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 
+    'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
     private ArrayList<Node> nodesList = new ArrayList<Node>();
-    private Node draggedNode;
-    private Node rClickedNode;
+    private Node draggedNode, rClickedNode, startNode, endNode;
     private boolean makingWeight = false;
     private JTextField weightTextField = new JTextField(Integer.toString(10), 2);
     private boolean hoveringLine = false;
     private int selectedLink[] = {0,0};
-    private Node startNode;
-    private Node endNode;
     private boolean lockGraph = false;
-    int mouseX;
-    int mouseY;
+    int mouseX, mouseY;
     
     
     
@@ -185,7 +181,8 @@ public class Graph extends JPanel {
     }
 
     public void createNodeGraph() {
-        nodesList.add(new Node(nodeNames[nodesList.size()], 50, 50));
+        nodesList.add(new Node(returnNodeName(nodesList.size()), 50, 50));
+        
         if (nodesList.getFirst() == nodesList.getLast()) {
             startNode = nodesList.get(0);
             startNode.setColor(Color.GREEN);
@@ -212,7 +209,7 @@ public class Graph extends JPanel {
         }
         nodesList.remove(deletedNode); // Delete Node
         for (int i=nodesList.indexOf(deletedNode)+1; i<nodesList.size(); i++) {
-            nodesList.get(i).setName(nodeNames[i]);
+            nodesList.get(i).setName(returnNodeName(i));
         }
         
     } 
@@ -244,6 +241,36 @@ public class Graph extends JPanel {
             throwError("Invalid weight value. Please enter a number.");
         }
     }
+
+    public void toggleGraphLock() {
+        if (lockGraph) {
+            lockGraph = false;
+        } else {
+            lockGraph = true;
+        }
+    }
+
+    public void throwError(String text) {
+        JOptionPane.showMessageDialog(this, text, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void clearAllNode() {
+        nodesList.clear();
+        repaint();
+    }
+
+    private String returnNodeName(int index) {
+        String nodeName;
+        char secondLetter = nodeNames[index%26];
+        if (index < 26) {
+            nodeName = ""+secondLetter;
+        } else {
+            char firstLetter = nodeNames[(int)Math.floor(index/26)-1];
+            nodeName = ""+firstLetter+secondLetter;
+        }
+        return nodeName;
+    }
+
     public void setStartNode(Node n) {
         startNode = n;
     }
@@ -256,22 +283,7 @@ public class Graph extends JPanel {
     public Node getEndNode() {
         return endNode;
     }
-
     public ArrayList<Node> getNodesList() {
         return nodesList;
-    } 
-    public void toggleGraphLock() {
-        if (lockGraph) {
-            lockGraph = false;
-        } else {
-            lockGraph = true;
-        }
-    }
-    public void throwError(String text) {
-        JOptionPane.showMessageDialog(this, text, "Error", JOptionPane.ERROR_MESSAGE);
-    }
-    public void clearAllNode() {
-        nodesList.clear();
-        repaint();
-    }
+    }  
 }

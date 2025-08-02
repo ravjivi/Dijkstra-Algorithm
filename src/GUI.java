@@ -124,7 +124,6 @@ public class GUI extends JFrame implements ActionListener {
             case "New Node":
                 System.out.println("Creating new node");
                 g.createNodeGraph();
-                System.out.println("");
                 break;
             case "Run Dijkstra's Algorithm":  
                 if (g.getStartNode() != null && g.getEndNode() != null && g.getStartNode() != g.getEndNode()) { // Graph has start and end node and they are not the same
