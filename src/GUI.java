@@ -67,8 +67,8 @@ public class GUI extends JFrame implements ActionListener {
         menuRun.setForeground(menuItemColor);
 
         ButtonGroup startGroup = new ButtonGroup();
-        algorithmSpeedItems = new JRadioButtonMenuItem[4];
-        for (int i=0; i<4; i++) {
+        algorithmSpeedItems = new JRadioButtonMenuItem[5];
+        for (int i=0; i<5; i++) {
             algorithmSpeedItems[i] = new JRadioButtonMenuItem(Double.toString(Math.pow(2, i)*0.5)+"x");
             algorithmSpeedItems[i].addActionListener(this);
             startGroup.add(algorithmSpeedItems[i]);
@@ -87,10 +87,9 @@ public class GUI extends JFrame implements ActionListener {
         runDijkstra = new JMenuItem("Run Dijkstra's Algorithm");
         runDijkstra.addActionListener(this);
         animationSpeed = new JMenu("Animation Speed");
-        animationSpeed.add(algorithmSpeedItems[0]);
-        animationSpeed.add(algorithmSpeedItems[1]);
-        animationSpeed.add(algorithmSpeedItems[2]);
-        animationSpeed.add(algorithmSpeedItems[3]);
+        for (int i=0; i<algorithmSpeedItems.length; i++) {
+            animationSpeed.add(algorithmSpeedItems[i]);
+        }
 
         menuFile.add(newGraph);
         menuFile.add(openGraph);
@@ -115,11 +114,16 @@ public class GUI extends JFrame implements ActionListener {
                 break;
             case "Open Graph":
                 System.out.println("Opening graph from CSV");
+                g.clearAllNode();
                 csv.readCSV(g);
                 break;
             case "Save Graph":
                 System.out.println("Saving graph");
-                csv.writeCSV(g);
+                if (g.getStartNode() != null && g.getEndNode() != null && g.getStartNode() != g.getEndNode()) {
+                    csv.writeCSV(g);
+                } else {
+                    g.throwError("Please select a start and end node by right clicking on nodes");
+                }
                 break;
             case "New Node":
                 System.out.println("Creating new node");

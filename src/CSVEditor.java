@@ -49,8 +49,7 @@ public class CSVEditor {
                     fromN.createLink(toN, Integer.parseInt(tempLine[2]));
                 }
             }
-            
-
+            myReader.close(); // Close reader to file be written later
         } catch(IOException e) { // The scanner cannot read the file
             System.out.println("Error: "+e);
         }

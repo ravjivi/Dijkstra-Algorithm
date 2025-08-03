@@ -65,10 +65,11 @@ public class Algorithm {
                         nextNode.setPreviousNode(currentNode);
                         queue.enqueue(nextNode);
                     }
-                    currentNode.setLinkColor(i, Color.GREEN);
+                    
+                    currentNode.setLinkColor(i, Color.ORANGE);
                     for (int k=0; k<nextNode.getLinkSize(); k++) {
                         if (nextNode.getLinkTo(k) == currentNode) {
-                            nextNode.setLinkColor(k, Color.GREEN);
+                            nextNode.setLinkColor(k, Color.ORANGE);
                         }
                     }
                     currentNode.setColor(Color.YELLOW);
@@ -83,11 +84,11 @@ public class Algorithm {
                     }
                     /* Sleep Screen */
 
-                    currentNode.setLinkColor(i, Color.BLACK);
-                    currentNode.setColor(Color.WHITE);
+                    currentNode.setLinkColor(i, Color.LIGHT_GRAY);
+                    currentNode.setColor(Color.GRAY);
                     for (int k=0; k<nextNode.getLinkSize(); k++) {
                         if (nextNode.getLinkTo(k) == currentNode) {
-                            nextNode.setLinkColor(k, Color.BLACK);
+                            nextNode.setLinkColor(k, Color.LIGHT_GRAY);
                         }
                     }
                     linksVisited++;
@@ -97,11 +98,14 @@ public class Algorithm {
         }
         g.toggleGraphLock();
         System.out.println("Djikstra done");
-        highlightShortestPath();
         g.repaint();
         AlgorithmSummary as = new AlgorithmSummary();
         as.showSummary(endNode.getCost(), linksVisited, nodeList);
-        
+        while (as.showingSummary()) {
+            highlightShortestPath();
+        } 
+        resetPath();
+        g.repaint();
     }
 
     public void printGraph() {
@@ -122,22 +126,40 @@ public class Algorithm {
         Node previousNode = endNode.getPreviousNode();
         while (currentNode != startNode) {
             currentNode.setColor(Color.MAGENTA);
-
-            for (int i=0; i<previousNode.getLinkSize(); i++) {
-                if (previousNode.getLinkTo(i) == currentNode) {
-                    previousNode.setLinkColor(i, Color.MAGENTA);
-                    for (int k=0; k<currentNode.getLinkSize(); k++) {
-                        if (currentNode.getLinkTo(k) == previousNode) {
-                            currentNode.setLinkColor(k, Color.MAGENTA);
+            if (currentNode.getPreviousNode() != null) {
+                for (int i=0; i<previousNode.getLinkSize(); i++) {
+                    if (previousNode.getLinkTo(i) == currentNode) {
+                        previousNode.setLinkColor(i, Color.MAGENTA);
+                        for (int k=0; k<currentNode.getLinkSize(); k++) {
+                            if (currentNode.getLinkTo(k) == previousNode) {
+                                currentNode.setLinkColor(k, Color.MAGENTA);
+                            }
                         }
                     }
                 }
+            } else {
+                break;
             }
+            
             currentNode = previousNode;
             previousNode = previousNode.getPreviousNode();
             
         }
         currentNode.setColor(Color.MAGENTA);
-        
+    }
+
+    private void resetPath() {
+        for (int n=0; n<nodeList.size(); n++) {
+            for (int i=0; i<nodeList.get(n).getLinkSize(); i++) {
+                nodeList.get(n).setLinkColor(i, Color.BLACK);
+            }
+            if (nodeList.get(n) == startNode) {
+                nodeList.get(n).setColor(Color.GREEN);
+            } else if (nodeList.get(n) == endNode) {
+                nodeList.get(n).setColor(Color.RED);
+            } else {
+                nodeList.get(n).setColor(Color.WHITE);
+            }
+        }
     }
 }

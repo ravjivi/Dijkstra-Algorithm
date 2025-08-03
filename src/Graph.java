@@ -19,8 +19,6 @@ public class Graph extends JPanel {
     private boolean lockGraph = false;
     int mouseX, mouseY;
     
-    
-    
     Graph() {
         this.setBackground(new Color(60,60,60));
         JPopupMenu rClickMenu = new JPopupMenu();

@@ -85,4 +85,12 @@ public class AlgorithmSummary {
         detailsDialog.add(scrollPane);
         detailsDialog.setVisible(true);
     }
+    
+    public boolean showingSummary() {
+        if (dialog.isVisible()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
