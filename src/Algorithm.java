@@ -98,7 +98,9 @@ public class Algorithm {
         }
         g.toggleGraphLock();
         System.out.println("Djikstra done");
+        highlightShortestPath();
         g.repaint();
+        
         AlgorithmSummary as = new AlgorithmSummary();
         as.showSummary(endNode.getCost(), linksVisited, nodeList);
         while (as.showingSummary()) {

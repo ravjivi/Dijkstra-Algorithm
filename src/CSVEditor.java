@@ -66,7 +66,7 @@ public class CSVEditor {
             myWriter.write(g.getStartNode().getName()+"\n");
             myWriter.write(g.getEndNode().getName()+"\n");
             for (int n=0; n<nodesList.size(); n++) {
-                myWriter.write(nodesList.get(n).getName()+","+nodesList.get(n).getX()+","+nodesList.get(n).getY()+",\n");
+                myWriter.write(nodesList.get(n).getName()+","+nodesList.get(n).getX()+","+nodesList.get(n).getY()+"\n");
                 for (int i=0; i<nodesList.get(n).getLinkSize(); i++) {
                     nLinks++;
                     tempLine.append(nodesList.get(n).getName()+","+nodesList.get(n).getLinkTo(i).getName()+","+nodesList.get(n).getWeight(i)+"\n");
