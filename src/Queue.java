@@ -9,6 +9,7 @@ public class Queue {
 
     public void enqueue(Node addNode) {
         int i = 0;
+        // Determine the postion of the node in the queue list
         while (i < queueList.size() && (queueList.get(i).getCost() <= addNode.getCost())) {
             i++;
         }
@@ -19,19 +20,12 @@ public class Queue {
         if (isEmpty()) {
             return null;
         }
-        Node node = queueList.get(0);
-        queueList.remove(node);
-        return node;
+        Node n = queueList.get(0); // Get the bottom node of the list
+        queueList.remove(n);
+        return n;
     }
 
     public boolean isEmpty() {
         return queueList.isEmpty();
-    }
-
-    public Node peek() {
-        if (isEmpty()) {
-            return null;
-        }
-        return queueList.get(0);
     }
 }

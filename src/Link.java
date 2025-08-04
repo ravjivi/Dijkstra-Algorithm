@@ -1,5 +1,6 @@
 import java.awt.Color;
 public class Link {
+    /* Object Variables */
     private Node toNode;
     private int weight;
     private Color colour;
@@ -10,6 +11,7 @@ public class Link {
         this.colour = Color.BLACK;
     }
 
+    /* Setters */
     public void setWeight(int w) {
         this.weight = w;
     }
@@ -17,6 +19,7 @@ public class Link {
         this.colour = c;
     }
 
+    /* Getters */
     public Node getToNode() {
         return this.toNode;
     }

@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.awt.*;
 
 public class Node {
+    /* Object variables */
     private String name;
     private int xPos;
     private int yPos;
@@ -21,28 +22,30 @@ public class Node {
     }
     public void createLink(Node to, int weight) {
         boolean exists = false;
-        for (int i=0; i<linksList.size(); i++) {
-            if (linksList.get(i).getToNode() == to) {
+        for (int i=0; i<linksList.size(); i++) { // Check every current link
+            if (linksList.get(i).getToNode() == to) { // If the imposed new link already exists 
                 exists = true;
                 break; 
             }
         }
-        if (!exists) {
+        if (!exists) { // If the imposed new link doesn't exists 
             linksList.add(new Link(to, weight));
         } 
     }
     public void deleteLink(int index) {
-        linksList.remove(index);
+        linksList.remove(index); // Remove from array list
     }
 
     public void setLinkWeight(int index, int weight) {
-        linksList.get(index).setWeight(weight);
+        linksList.get(index).setWeight(weight); // Set the new link weight
         for (int i=0; i<linksList.get(index).getToNode().getLinkSize(); i++) {
-            if (linksList.get(index).getToNode().getLinkToString(i).equals(this.name) && linksList.get(index).getToNode().getWeight(i) != linksList.get(index).getWeight()) {
-                linksList.get(index).getToNode().setLinkWeight(0, weight);
+            // Check if there is a same link in the opposite direction
+            if (linksList.get(index).getToNode().getLinkToString(i).equals(this.name) && linksList.get(index).getToNode().getWeight(i) != linksList.get(index).getWeight()) { 
+                linksList.get(index).getToNode().setLinkWeight(0, weight);  
             }
         }        
     }
+    /* Setters */
     public void setX(int x) {
         this.xPos = x;
     }
@@ -68,6 +71,7 @@ public class Node {
         linksList.get(n).setColor(c);
     }
     
+    /* Getters */
     public String getName() {
         return this.name;
     }

@@ -42,7 +42,6 @@ public class AlgorithmSummary {
 
         buttonPanel.add(okButton);
         buttonPanel.add(detailsButton);
-
         panel.add(buttonPanel);
 
         dialog.pack();
