@@ -27,11 +27,13 @@ public class GUI extends JFrame implements ActionListener {
     public GUI(String os) {
         createWindow();
         if (os.equals("windows")) {
+            // Set windows keyboard shortcuts
             newNode.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
             newGraph.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.CTRL_DOWN_MASK));
             openGraph.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK));
             saveGraph.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
         } else if (os.equals("mac")) {
+            // Set mac keyboard shortcuts
             newNode.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.META_DOWN_MASK));
             newGraph.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.META_DOWN_MASK));
             openGraph.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.META_DOWN_MASK));
@@ -42,9 +44,9 @@ public class GUI extends JFrame implements ActionListener {
     private void createWindow() {
         this.setTitle("Dijkstra's Algorithm");
         this.getContentPane().setPreferredSize(new Dimension((int)SCREENSIZE.getWidth()*3/4, (int)SCREENSIZE.getHeight()*3/4)); // Make window size 3/4 the screen size
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE); // Kill program when window is closed
         
-        addElements();
+        addElements(); // Add components to GUI
 
         this.pack();
         this.setLocationRelativeTo(null);  // Centres the screen
@@ -57,8 +59,9 @@ public class GUI extends JFrame implements ActionListener {
         a = new Algorithm(g);
 
         menuBar = new JMenuBar();
-        menuBar.setBorder(BorderFactory.createEmptyBorder());
+        menuBar.setBorder(BorderFactory.createEmptyBorder()); // Remove margin arond menu bar
 	    menuBar.setBackground(menuBarColor);
+        // Set name and colour of menu headers
         menuFile = new JMenu("File");
 	    menuFile.setForeground(menuItemColor);
         menuEdit = new JMenu("Edit");
@@ -66,6 +69,7 @@ public class GUI extends JFrame implements ActionListener {
         menuRun = new JMenu("Run");
         menuRun.setForeground(menuItemColor);
 
+        // Create button group for speed control and set the values
         ButtonGroup startGroup = new ButtonGroup();
         algorithmSpeedItems = new JRadioButtonMenuItem[5];
         for (int i=0; i<5; i++) {
@@ -73,9 +77,9 @@ public class GUI extends JFrame implements ActionListener {
             algorithmSpeedItems[i].addActionListener(this);
             startGroup.add(algorithmSpeedItems[i]);
         }
-        algorithmSpeedItems[1].setSelected(true);
+        algorithmSpeedItems[1].setSelected(true); // Default selected button is 1x
         
-        
+        // Set Menu items names and action listener 
         newGraph = new JMenuItem("New Graph");
         newGraph.addActionListener(this);
         openGraph = new JMenuItem("Open Graph");
@@ -91,6 +95,7 @@ public class GUI extends JFrame implements ActionListener {
             animationSpeed.add(algorithmSpeedItems[i]);
         }
 
+        // Add menu conmponets to their appropirate parent
         menuFile.add(newGraph);
         menuFile.add(openGraph);
         menuFile.add(saveGraph);
@@ -105,46 +110,51 @@ public class GUI extends JFrame implements ActionListener {
         this.setJMenuBar(menuBar);
     }
 
+    /**
+     * This method is called whenever any button is clicked
+     * It checks what button was clicked then performs its relevant action
+    */
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
-        switch (cmd) {
+        switch (cmd) { // Determines result based off input action
             case "New Graph":
                 System.out.println("Create new graph");
-                g.clearAllNode();
+                g.clearAllNode(); // Delete all nodes and llinks
                 break;
             case "Open Graph":
                 System.out.println("Opening graph from CSV");
-                g.clearAllNode();
-                csv.readCSV(g);
+                g.clearAllNode(); // Delete all nodes and links
+                csv.readCSV(g); // Open graph from CSV
                 break;
             case "Save Graph":
                 System.out.println("Saving graph");
-                if (g.getStartNode() != null && g.getEndNode() != null && g.getStartNode() != g.getEndNode()) {
-                    csv.writeCSV(g);
+                if (g.getStartNode() != null && g.getEndNode() != null && g.getStartNode() != g.getEndNode()) { // Graph has start and end node and they are not the same
+                    csv.writeCSV(g); // Write current graph to CSV
                 } else {
-                    g.throwError("Please select a start and end node by right clicking on nodes");
+                    g.throwError("Please select a start and end node by right clicking on nodes"); // Open error dialogue
                 }
                 break;
             case "New Node":
                 System.out.println("Creating new node");
-                g.createNodeGraph();
+                g.createNodeGraph(); // Add 1 node
                 break;
             case "Run Dijkstra's Algorithm":  
                 if (g.getStartNode() != null && g.getEndNode() != null && g.getStartNode() != g.getEndNode()) { // Graph has start and end node and they are not the same
                     System.out.println("running Dijkstra's Algorithm");
-                    new Thread(() -> {
-                        a.setupAlgorithm(g);
+                    new Thread(() -> { // Run algorithm on new thread for thread.sleep later
+                        a.setupAlgorithm(g); // Start algorithm
                     }).start();
                 }  else {
-                    g.throwError("Please select a start and end node by right clicking on nodes");
+                    g.throwError("Please select a start and end node by right clicking on nodes"); // Open error dialogue
                 }
             default:
                 break;
         }
+        // Check if button press was either of the button group items
         for (int i=0; i<algorithmSpeedItems.length; i++) {
             if (cmd == algorithmSpeedItems[i].getText()) {
                 System.out.println("Changing algorithm speed to: "+algorithmSpeedItems[i].getText());
-                a.setAlgorithmSpeed(Math.pow(2, i)*0.5);
+                a.setAlgorithmSpeed(Math.pow(2, i)*0.5); // Change algorithm speed
             }
         }
     }
