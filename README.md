@@ -1,18 +1,12 @@
-## Getting Started
+To run the game, run the Main.java file with you prefered IDE
+Alternatively using command prompt, navigate to the Dijkstra-Algorithm/src directory and run:
+    java Main.java
+If there is a error with class, run:
+    javac Main.java 
+    this will compile the program
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+Using BlueJ:
+Open the Dijkstra-Algorithm folder and right-click Main and run the main method.
 
-## Folder Structure
-
-The workspace contains two folders by default, where:
-
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
-
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+To start, try opening a pre-made graph by going to File --> Open graph in the menu bar.
+Then go to Run --> Run Dijkstra's Algorithm

@@ -24,6 +24,10 @@ public class GUI extends JFrame implements ActionListener {
 
     private CSVEditor csv = new CSVEditor();
 
+    /**
+     * Constructor: Initializes the GUI with correct keyboard shortcuts
+     * depending on the operating system, and sets up the window.
+     */
     public GUI(String os) {
         createWindow();
         if (os.equals("windows")) {
@@ -41,6 +45,10 @@ public class GUI extends JFrame implements ActionListener {
         }
     }
 
+    /**
+     * Creates the main window with initial settings,
+     * such as size, close operation, and visibility.
+     */
     private void createWindow() {
         this.setTitle("Dijkstra's Algorithm");
         this.getContentPane().setPreferredSize(new Dimension((int)SCREENSIZE.getWidth()*3/4, (int)SCREENSIZE.getHeight()*3/4)); // Make window size 3/4 the screen size
@@ -54,6 +62,10 @@ public class GUI extends JFrame implements ActionListener {
         this.setVisible(true);
     }
 
+    /**
+     * Adds all GUI components like the graph, menu bar, buttons,
+     * and connects them with their respective event listeners.
+     */
     private void addElements() {
         g = new Graph();
         a = new Algorithm(g);
@@ -111,9 +123,10 @@ public class GUI extends JFrame implements ActionListener {
     }
 
     /**
-     * This method is called whenever any button is clicked
-     * It checks what button was clicked then performs its relevant action
-    */
+     * Handles all button and menu item actions.
+     * Determines the clicked item and executes the appropriate response,
+     * including graph editing and algorithm execution.
+     */
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
         switch (cmd) { // Determines result based off input action
@@ -159,6 +172,7 @@ public class GUI extends JFrame implements ActionListener {
         }
     }
 
+    // Returns graph
     public Graph returnGraph() {
         return g;
     }

@@ -26,6 +26,6 @@ public class Queue {
     }
 
     public boolean isEmpty() {
-        return queueList.isEmpty();
+        return queueList.isEmpty(); // Return boolean
     }
 }

@@ -19,6 +19,10 @@ public class Graph extends JPanel {
     private boolean lockGraph = false;
     private int mouseX, mouseY;
     
+    /**
+     * Constructor. Sets background color, initializes right-click menu,
+     * and attaches mouse listeners for node interaction and dragging.
+     */
     Graph() {
         this.setBackground(new Color(60,60,60)); // Background colour
         // Add menu items to popup menu
@@ -112,6 +116,10 @@ public class Graph extends JPanel {
         paintNode(g2d); // Paint nodes over links
     }
     
+    /**
+     * Draws all links (edges) between nodes including weight text,
+     * and checks if the mouse is hovering over any line.
+     */
     private void paintWeight(Graphics2D g2d) {
         g2d.setStroke(new BasicStroke(textSize/5));
         hoveringLine = false; // Reset hovering line
@@ -141,6 +149,10 @@ public class Graph extends JPanel {
         }
     }
 
+
+    /**
+     * Draws all nodes and centers their name labels inside them.
+     */
     private void paintNode(Graphics2D g2d) {
         for (int n=0; n<nodesList.size(); n++) { // For every node
             g2d.setColor(nodesList.get(n).getColor()); // Set colour
@@ -159,6 +171,10 @@ public class Graph extends JPanel {
         }
     }
 
+    /**
+     * Checks if the mouse is hovering over any node. 
+     * If so, highlights it and returns its index.
+     */
     public int checkNodeHover(int mouseX, int mouseY) {
         for (int n=0; n<nodesList.size(); n++) { // For every node
             double dx = mouseX - (nodesList.get(n).getX()+nodeRadius); // Distance of cursor from centre of circle (x)
@@ -184,6 +200,10 @@ public class Graph extends JPanel {
         return -1; // -1 node does not exist so it tells the program nothing is hovered
     }
 
+    /**
+     * Adds a new node to the graph with default position.
+     * Automatically sets it as the start node if it's the first one.
+     */
     public void createNodeGraph() {
         nodesList.add(new Node(returnNodeName(nodesList.size()), 50, 50)); // Add node with given parameters: name, x-pos, y-pos
         
@@ -209,6 +229,10 @@ public class Graph extends JPanel {
         nodesList.get(n).setColor(c); // Change colour of node
     }
     
+    /**
+     * Deletes a node and removes all associated links in the graph.
+     * Also renames nodes that come after it to keep alphabetical order of higher nodes.
+     */
     private void deleteNode(Node deletedNode) { // Called after node is deleted to update names 
         for (int n=0; n<nodesList.size(); n++) {
             for (int i=0; i<nodesList.get(n).getLinkSize(); i++) {
@@ -224,6 +248,10 @@ public class Graph extends JPanel {
         
     } 
 
+    /**
+     * Opens a dialog box to edit the weight of a selected link.
+     * Validates input to ensure it's a positive integer.
+     */
     private void setLinkWeight() {
         JDialog dialog = new JDialog(); // Create dialog window
         JTextField weightTextField = new JTextField(Integer.toString(10), 2); // Editable text field
@@ -239,49 +267,62 @@ public class Graph extends JPanel {
 
         dialog.add(okButton, BorderLayout.SOUTH);
         dialog.getRootPane().setDefaultButton(okButton); // Closes the dialog box when Enter key is pressed
-        dialog.setVisible(true);
-        try {
-            int weight = Integer.parseInt(weightTextField.getText());
+        dialog.setVisible(true); // Make visible
+        try { // In try so it doesn't crash if the text field is a string or double
+            int weight = Integer.parseInt(weightTextField.getText()); // Get the input from editable text field
             if (weight > 0) {
-                nodesList.get(selectedLink[0]).setLinkWeight(selectedLink[1], weight);
-            } else {
+                nodesList.get(selectedLink[0]).setLinkWeight(selectedLink[1], weight); // Set the selected link to the new weight
+            } else { // Weight entered was negaive
                 throwError("Invalid weight value. Please enter a number greater than 0.");
             }
             
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException e) { // Weight was entered as a string or double
             throwError("Invalid weight value. Please enter a number.");
         }
     }
 
+    /**
+     * Enables or disables editing of the graph (locks/unlocks dragging).
+     */
     public void toggleGraphLock() {
-        if (lockGraph) {
+        if (lockGraph) { // If currently locked
             lockGraph = false;
-        } else {
+        } else { // If currently unlocked
             lockGraph = true;
         }
     }
 
-    public void throwError(String text) {
-        JOptionPane.showMessageDialog(this, text, "Error", JOptionPane.ERROR_MESSAGE);
+    /**
+     * Displays an error dialog box with the provided message.
+     */
+    public void throwError(String text) { 
+        JOptionPane.showMessageDialog(this, text, "Error", JOptionPane.ERROR_MESSAGE); // Open error with text
     }
 
     public void clearAllNode() {
-        nodesList.clear();
+        nodesList.clear(); // Delete all nodes from array list
         repaint();
     }
 
+    /**
+     * Generates a unique name for a node based on its index.
+     * For indices 0–25: returns single letters A–Z.
+     * For indices 26 and above: returns double-letter names like AA, AB, ..., AZ, BA, etc.
+     */
     private String returnNodeName(int index) {
         String nodeName;
-        char secondLetter = nodeNames[index%26];
-        if (index < 26) {
-            nodeName = ""+secondLetter;
+        char secondLetter = nodeNames[index%26]; // Index of nodeNames of Remainder of index / 26
+        if (index < 26) { 
+            // Only second character because nodes start with only 1 character
+            nodeName = ""+secondLetter; 
         } else {
-            char firstLetter = nodeNames[(int)Math.floor(index/26)-1];
+            char firstLetter = nodeNames[(int)Math.floor(index/26)-1]; // Add first character to the start
             nodeName = ""+firstLetter+secondLetter;
         }
-        return nodeName;
+        return nodeName; // Return the name of the node
     }
 
+    /* Setters and getters */
     public void setStartNode(Node n) {
         startNode = n;
     }
